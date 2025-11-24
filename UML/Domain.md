@@ -20,7 +20,7 @@ classDiagram
 
     class Digest {
         <<Entity>> 
-        + Digest: string
+        + Code: string
     }
 
     class ImageWithTags {
@@ -31,5 +31,5 @@ classDiagram
     %%{{relationship}}%%
     ImageWithTags "1"*--"1" RepositoryImage
     ImageWithTags "1"o--"0..*" Tag
-    Tag "1" --"1" Digest
+    Tag "1"-->"1" Digest
 ```
