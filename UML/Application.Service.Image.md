@@ -1,21 +1,11 @@
 # Application.Service.Image
 
 ```mermaid
-    graph TB
-        subgraph Delete
-            direction TB
-            start2((start))
-            digest2[Digest]
-            termination2((end))
-
-            %%{relationship}%%
-            start2 --"Delete"--> digest2 --> termination2
-        end
-        
+    graph TB    
         subgraph List
             direction TB
             start1((start))
-            Image1[Image]
+            Image1[RepositryImage]
             termination1((end))
 
             %%{relationship}%%
@@ -23,15 +13,21 @@
         end
 ```
 
+---
+
 ```mermaid
+---
+config:
+    class:
+        hideEmptyMembersBox: true
+---
     classDiagram
-        class ImageRequest {
+        class ImageListRequest {
         }
 
-        class ImageResponse{
-            +Images: List<Image>
+        class ImageListResponse{
+            +RepositryImages: List<RepositryImage>
             +Success: bool
             +ErrorMessage: string
         }
-
 ```
