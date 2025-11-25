@@ -2,6 +2,6 @@
 {
     public interface ITagRepository
     {
-        Task<List<ITag>?> Load(IRepositoryImage image);
+        Task<List<ITag>?> Load(IRepositoryImage image, CancellationToken token);
     }
 }

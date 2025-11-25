@@ -17,7 +17,10 @@ public class ServiceRegister
         serviceCollection.AddSerilog(
             (configure) =>
                 configure.ReadFrom.Configuration(configuration));
-        serviceCollection.RegisterDomain(assemblies);
+        if (assemblies.Length > 0)
+        {
+            serviceCollection.RegisterDomain(assemblies);
+        }
         serviceCollection.AddHttpClient();
         serviceCollection.Configure<RegistryOption>(
             configuration.GetSection(RegistryOption.RegistrySection));

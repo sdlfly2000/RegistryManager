@@ -19,7 +19,7 @@ classDiagram
     }
 
     class Digest {
-        <<Entity>> 
+        <<ValueObject>> 
         + Code: string
     }
 

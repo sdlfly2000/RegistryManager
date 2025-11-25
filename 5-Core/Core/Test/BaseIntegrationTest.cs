@@ -8,6 +8,6 @@ public abstract class BaseIntegrationTest
 
     protected BaseIntegrationTest()
     {
-        _serviceProvider = ServiceRegister.Register("RegistryCtl");
+        _serviceProvider = ServiceRegister.Register("Infra.Http");
     }
 }

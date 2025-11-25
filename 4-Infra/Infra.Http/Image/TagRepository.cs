@@ -2,6 +2,8 @@
 using Core.Options;
 using Domain.Image;
 using Domain.Image.Repositories;
+using Infra.Http.Image.model;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
@@ -12,29 +14,49 @@ namespace Infra.Http.Image
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly RegistryOption _option;
+        private readonly IDigestRepositry _digestRepository;
 
-        public TagRepository(IHttpClientFactory httpClientFactory, IOptions<RegistryOption> option)
+        public TagRepository(IHttpClientFactory httpClientFactory, IDigestRepositry digestRepository, IOptions<RegistryOption> option)
         {
             _httpClientFactory = httpClientFactory;
             _option = option.Value;
+            _digestRepository = digestRepository;
         }
 
-        public async Task<List<ITag>?> Load(IRepositoryImage image)
+        public async Task<List<ITag>?> Load(IRepositoryImage image, CancellationToken token)
         {
+            var tags = new List<Tag>();
+
             using var httpClient = _httpClientFactory.CreateClient();
             httpClient.BaseAddress = new Uri(_option.BaseUrl);
 
             var relativeUrl = string.Concat("v2/", image.Name, "/tags/list");
-            using var response = await httpClient.GetAsync(new Uri(relativeUrl, UriKind.Relative)).ConfigureAwait(false);
+            using var response = await httpClient.GetAsync(new Uri(relativeUrl, UriKind.Relative), token).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpRequestException($"Failed to load tags for image {image.Name}. Status code: {response.StatusCode}");
             }
-
             var contentTags = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            
-            return JsonSerializer.Deserialize<List<ITag>>(contentTags);
+            var tagModel = JsonSerializer.Deserialize<TagModel>(contentTags);
+
+            if (tagModel != null)
+            {
+                foreach (var tagName in tagModel.tags)
+                {
+                    var digest = await _digestRepository.Load(image, tagName, token).ConfigureAwait(false);
+
+                    if (digest != null)
+                    {
+                        tags.Add(new Tag
+                        {
+                            Name = tagName,
+                            Digest = digest
+                        });
+                    }
+                }
+            }
+            return tags.ToList<ITag>();
         }
     }
 }
