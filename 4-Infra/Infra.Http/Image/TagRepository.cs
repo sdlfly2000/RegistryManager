@@ -2,6 +2,7 @@
 using Core.Options;
 using Domain.Image;
 using Domain.Image.Repositories;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace Infra.Http.Image
@@ -9,21 +10,22 @@ namespace Infra.Http.Image
     [ServiceLocate(typeof(ITagRepository))]
     public class TagRepository : ITagRepository
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly RegistryOption _option;
 
-        public TagRepository(IHttpClientFactory httpClientFactory, RegistryOption option)
+        public TagRepository(IHttpClientFactory httpClientFactory, IOptions<RegistryOption> option)
         {
-            _httpClient = httpClientFactory.CreateClient();
-            _option = option;
-
-            _httpClient.BaseAddress = new Uri(_option.BaseUrl);
+            _httpClientFactory = httpClientFactory;
+            _option = option.Value;
         }
 
         public async Task<List<ITag>?> Load(IRepositoryImage image)
         {
+            using var httpClient = _httpClientFactory.CreateClient();
+            httpClient.BaseAddress = new Uri(_option.BaseUrl);
+
             var relativeUrl = string.Concat("v2/", image.Name, "/tags/list");
-            using var response = await _httpClient.GetAsync(new Uri(relativeUrl, UriKind.Relative)).ConfigureAwait(false);
+            using var response = await httpClient.GetAsync(new Uri(relativeUrl, UriKind.Relative)).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
