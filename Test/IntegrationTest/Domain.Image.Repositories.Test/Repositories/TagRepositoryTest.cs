@@ -1,7 +1,9 @@
 ﻿using Core.Test;
+using Domain.Image;
+using Domain.Image.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Domain.Image.Repositories.Test;
+namespace Domain.Test.Repositories;
 
 [TestClass]
 public sealed class TagRepositoryTest : BaseIntegrationTest
