@@ -2,9 +2,7 @@
 using Core.Options;
 using Domain.Image;
 using Domain.Image.Repositories;
-using System.Security.Policy;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Infra.Http.Image
 {
