@@ -44,13 +44,13 @@ namespace Infra.Http.Image
             {
                 foreach (var tagName in tagModel.tags)
                 {
-                    var digest = await _digestRepository.Load(image, tagName, token).ConfigureAwait(false);
+                    var tag = new Tag(tagName);
+                    var digest = await _digestRepository.Load(image, tag, token).ConfigureAwait(false);
 
                     if (digest != null)
                     {
-                        tags.Add(new Tag
+                        tags.Add(new Tag(tagName)
                         {
-                            Name = tagName,
                             Digest = digest
                         });
                     }

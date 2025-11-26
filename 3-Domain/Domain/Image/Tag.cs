@@ -1,8 +1,16 @@
-﻿namespace Domain.Image
+﻿using Core.AOP.Cache;
+
+namespace Domain.Image;
+
+public class Tag : ITag
 {
-    public class Tag : ITag
+    public Tag(string tagName)
     {
-        public required string Name { get; set; }
-        public required IDigest Digest { get; set; }
+        Name = tagName;
     }
+
+    [CacheKey]
+    public string Name { get; set; }
+
+    public IDigest Digest { get; set; }
 }

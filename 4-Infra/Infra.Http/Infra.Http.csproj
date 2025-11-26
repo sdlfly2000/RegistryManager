@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MrAdvice" Version="2.19.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\3-Domain\Domain\Domain.csproj" />
     <ProjectReference Include="..\..\5-Core\Core.Shared\Core.Shared.csproj" />
     <ProjectReference Include="..\..\5-Core\Core\Core.csproj" />

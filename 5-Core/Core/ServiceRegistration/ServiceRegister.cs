@@ -24,6 +24,7 @@ public class ServiceRegister
         serviceCollection.AddHttpClient();
         serviceCollection.Configure<RegistryOption>(
             configuration.GetSection(RegistryOption.RegistrySection));
+        serviceCollection.AddMemoryCache();
         return serviceCollection.BuildServiceProvider();
     }
 }

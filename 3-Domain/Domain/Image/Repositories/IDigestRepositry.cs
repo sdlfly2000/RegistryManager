@@ -2,6 +2,6 @@
 {
     public interface IDigestRepositry
     {
-        Task<IDigest?> Load(IRepositoryImage image, string tagName, CancellationToken token);
+        Task<IDigest?> Load(IRepositoryImage image, ITag tag, CancellationToken token);
     }
 }

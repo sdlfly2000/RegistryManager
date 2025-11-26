@@ -1,4 +1,5 @@
 ﻿using Common.Core.DependencyInjection;
+using Core.AOP.Cache;
 using Core.Options;
 using Domain.Image;
 using Domain.Image.Repositories;
@@ -11,19 +12,22 @@ namespace Infra.Http.Image
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly RegistryOption _option;
+        private readonly IServiceProvider _serviceProvider;
 
-        public DigestRepository(IHttpClientFactory httpClientFactory, IOptions<RegistryOption> option)
+        public DigestRepository(IHttpClientFactory httpClientFactory, IOptions<RegistryOption> option, IServiceProvider serviceProvider)
         {
             _httpClientFactory = httpClientFactory;
             _option = option.Value;
+            _serviceProvider = serviceProvider;
         }
 
-        public async Task<IDigest?> Load(IRepositoryImage image, string tagName, CancellationToken token)
+        [Cache(masterKey: "Tag", cachedTypes: [typeof(RepositoryImage), typeof(Tag)])]
+        public async Task<IDigest?> Load(IRepositoryImage image, ITag tag, CancellationToken token)
         {
             using var httpClient = _httpClientFactory.CreateClient();
             httpClient.BaseAddress = new Uri(_option.BaseUrl);
 
-            var relativeUrl = string.Concat("v2/", image.Name, "/manifests/", tagName);
+            var relativeUrl = string.Concat("v2/", image.Name, "/manifests/", tag.Name);
             using var response = await httpClient.GetAsync(new Uri(relativeUrl, UriKind.Relative), token).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
