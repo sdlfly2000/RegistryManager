@@ -21,7 +21,7 @@ namespace Infra.Http.Image
             _serviceProvider = serviceProvider;
         }
 
-        [Cache(masterKey: "Tag", cachedTypes: [typeof(RepositoryImage), typeof(Tag)])]
+        [Cache(masterKey: nameof(EnumCacheMasterKey.Digest),returnType: typeof(Digest), cachedTypes: [typeof(RepositoryImage), typeof(Tag)])]
         public async Task<IDigest?> Load(IRepositoryImage image, ITag tag, CancellationToken token)
         {
             using var httpClient = _httpClientFactory.CreateClient();

@@ -12,5 +12,5 @@ public class Tag : ITag
     [CacheKey]
     public string Name { get; set; }
 
-    public IDigest Digest { get; set; }
+    public IDigest? Digest { get; set; }
 }

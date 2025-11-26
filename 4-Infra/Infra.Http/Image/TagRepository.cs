@@ -3,7 +3,6 @@ using Core.Options;
 using Domain.Image;
 using Domain.Image.Repositories;
 using Infra.Http.Image.model;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 
@@ -45,15 +44,8 @@ namespace Infra.Http.Image
                 foreach (var tagName in tagModel.tags)
                 {
                     var tag = new Tag(tagName);
-                    var digest = await _digestRepository.Load(image, tag, token).ConfigureAwait(false);
-
-                    if (digest != null)
-                    {
-                        tags.Add(new Tag(tagName)
-                        {
-                            Digest = digest
-                        });
-                    }
+                    tag.Digest = await _digestRepository.Load(image, tag, token).ConfigureAwait(false);
+                    tags.Add(tag);
                 }
             }
             return tags.ToList<ITag>();

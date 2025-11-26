@@ -13,13 +13,16 @@ public class DigestRepositoryTest : BaseIntegrationTest
     {
         // Arrange
         var image = new RepositoryImage("authservice/authservice");
-        var tag = new Tag("tagName");
+        var tag = new Tag("20251103-151324");
         var service = _serviceProvider.GetRequiredService<IDigestRepositry>();
 
         // Action
-        var tags = await service.Load(image, tag, CancellationToken.None).ConfigureAwait(false);
+        var digest = await service.Load(image, tag, CancellationToken.None).ConfigureAwait(false);
+        var digestFromMemory = await service.Load(image, tag, CancellationToken.None).ConfigureAwait(false);
 
         // Assert
-        Assert.IsNotNull(tags);
+        Assert.IsNotNull(digest);
+        Assert.IsNotNull(digestFromMemory);
+        Assert.AreEqual(digest.Code, digestFromMemory.Code);
     }
 }
