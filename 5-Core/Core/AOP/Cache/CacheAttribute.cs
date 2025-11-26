@@ -47,7 +47,7 @@ public class CacheAttribute : Attribute, IMethodAsyncAdvice
             return cachedKeyAttribute is not null;
         });
 
-        return keyProperty?.GetValue(cachedArgument)
+        return keyProperty?.GetValue(cachedArgument)?
                            .ToString();
     }
 }
