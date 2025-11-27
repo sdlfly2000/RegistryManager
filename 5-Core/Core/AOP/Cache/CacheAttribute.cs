@@ -13,6 +13,8 @@ public class CacheAttribute : Attribute, IMethodAsyncAdvice
     public Type[] CachedTypes { get; set; }
     public Type ReturnType { get; set; }
 
+    private IMemoryCache? _memoryCache;
+
     public CacheAttribute(string masterKey, Type returnType, params Type[] cachedTypes)
     {
         MasterKey = masterKey;
@@ -23,13 +25,13 @@ public class CacheAttribute : Attribute, IMethodAsyncAdvice
     public async Task Advise(MethodAsyncAdviceContext context)
     {
         var serviceProvider = context.GetMemberServiceProvider();
-        var memoryCache = serviceProvider?.GetRequiredService<IMemoryCache>();
+        _memoryCache = serviceProvider?.GetRequiredService<IMemoryCache>();
 
-        Debug.Assert(memoryCache is not null, "MemoryCache is null");
+        Debug.Assert(_memoryCache is not null, "MemoryCache is null");
 
         var cacheKeyUnique = ComposeCacheKeyUnique(context);
 
-        var valueFromCache = GetValueFromCache(memoryCache, cacheKeyUnique);
+        var valueFromCache = GetValueFromCache(cacheKeyUnique);
 
         if (valueFromCache is not null)
         {
@@ -39,17 +41,24 @@ public class CacheAttribute : Attribute, IMethodAsyncAdvice
         
         await context.ProceedAsync();
 
-        var returnValue = context.ReturnValue?.GetType()?
-                            .GetProperty("Result")?
-                            .GetValue(context.ReturnValue);
-        var jsonValue = JsonSerializer.Serialize(returnValue);
-        memoryCache.Set<string>(cacheKeyUnique, jsonValue);
+        PersistToCache(context.ReturnValue, cacheKeyUnique);
     }
 
     #region Private Methods
-    private object? GetValueFromCache(IMemoryCache memoryCache, string cacheKeyUnique)
+
+    private void PersistToCache(object? returnValue, string cacheKeyUnique)
     {
-        if (memoryCache?.TryGetValue<string>(cacheKeyUnique, out var cachedValue) ?? false)
+        var value = returnValue?.GetType()?
+                    .GetProperty("Result")?
+                    .GetValue(returnValue);
+        var jsonValue = JsonSerializer.Serialize(returnValue);
+
+        _memoryCache?.Set<string>(cacheKeyUnique, jsonValue, TimeSpan.FromHours(1));
+    }
+
+    private object? GetValueFromCache(string cacheKeyUnique)
+    {
+        if (_memoryCache?.TryGetValue<string>(cacheKeyUnique, out var cachedValue) ?? false)
         {
             var valueObject = !string.IsNullOrEmpty(cachedValue)
                                             ? JsonSerializer.Deserialize(cachedValue, ReturnType)
