@@ -51,7 +51,7 @@ public class CacheAttribute : Attribute, IMethodAsyncAdvice
         var value = returnValue?.GetType()?
                     .GetProperty("Result")?
                     .GetValue(returnValue);
-        var jsonValue = JsonSerializer.Serialize(returnValue);
+        var jsonValue = JsonSerializer.Serialize(value);
 
         _memoryCache?.Set<string>(cacheKeyUnique, jsonValue, TimeSpan.FromHours(1));
     }
