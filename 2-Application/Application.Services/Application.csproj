@@ -10,4 +10,8 @@
     <PackageReference Include="MrAdvice" Version="2.19.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\3-Domain\Domain\Domain.csproj" />
+  </ItemGroup>
+
 </Project>

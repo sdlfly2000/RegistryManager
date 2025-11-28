@@ -24,9 +24,7 @@ namespace Infra.Http.Image
         [Cache(masterKey: nameof(EnumCacheMasterKey.Digest),returnType: typeof(Digest), cachedTypes: [typeof(RepositoryImage), typeof(Tag)])]
         public async Task<IDigest?> Load(IRepositoryImage image, ITag tag, CancellationToken token)
         {
-            using var httpClient = _httpClientFactory.CreateClient();
-            httpClient.BaseAddress = new Uri(_option.BaseUrl);
-
+            using var httpClient = CreateHttpClient();
             var relativeUrl = string.Concat("v2/", image.Name, "/manifests/", tag.Name);
             using var response = await httpClient.GetAsync(new Uri(relativeUrl, UriKind.Relative), token).ConfigureAwait(false);
 
@@ -37,5 +35,16 @@ namespace Infra.Http.Image
 
             return new Digest { Code = response.Headers.GetValues("Docker-Content-Digest").First() };
         }
+
+        #region Private Methods
+
+        private HttpClient CreateHttpClient()
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.BaseAddress = new Uri(_option.BaseUrl);
+            return httpClient;
+        }
+
+        #endregion
     }
 }

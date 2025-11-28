@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Domain.Test.Repositories;
 
 [TestClass]
-public class DigestRepositoryTest : BaseIntegrationTest
+public class DigestRepositryTest : BaseIntegrationTest
 {
     [TestMethod, TestCategory(nameof(EnumTestCategory.IntegrationTest))]
     public async Task GIVEN_Tag_WHEN_Load_THEN_Digestd_Retern()

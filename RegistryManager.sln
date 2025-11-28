@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36705.20
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistryCtl", "1-Presentation\RegistryCtl\RegistryCtl.csproj", "{2249EAB5-AC3C-4247-8266-D93E5A00E37B}"
 EndProject
@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "5-Core\Core\Core.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Shared", "5-Core\Core.Shared\Core.Shared.csproj", "{4D686988-D2EF-412F-B3BD-8C307C815B88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Services", "2-Application\Application.Services\Application.Services.csproj", "{47F15671-6AE1-4E6B-B750-21591B99E579}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "2-Application\Application.Services\Application.csproj", "{47F15671-6AE1-4E6B-B750-21591B99E579}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "3-Domain\Domain\Domain.csproj", "{330A115F-10E6-4BD6-B649-E0788203F1F5}"
 EndProject

@@ -2,6 +2,6 @@
 {
     public interface IImageRepository
     {
-        Task<IRepositoryImage> Load(string imageName);
+        Task<IList<RepositoryImage>> LoadFullList(CancellationToken token);
     }
 }

@@ -1,4 +1,4 @@
-# Application.Service.Image
+# Application.Services.Image.ImageAppService
 
 ```mermaid
     graph TB    
@@ -12,10 +12,10 @@
             start1 --"List"--> Image1 --> termination1
         end
 
-        subgraph List2["**List** (ImageListWithTagRequest)"]
+        subgraph List2["**List** (ImageListWithTagsRequest)"]
             direction TB
             start2((start))
-            Image2[RepositryImage]
+            Image2[RepositryImage With Tags]
             termination2((end))
 
             %%{relationship}%%
@@ -47,21 +47,22 @@ config:
         class ImageListFullRequest {
         }
 
-        class ImageListWithTagRequest {
+        class ImageListWithTagsRequest {
+            + Image: RepositryImage
         }
 
         class ImageListFullResponse{
             + Images: IList~RepositryImage~
         }
 
-        class ImageListWithTagResponse{
-            + Image: RepositryImage
+        class ImageListWithTagsResponse{
+            + Image: ImageWithTags
         }
 
         %%{relationship}%%
         AppRequest <|-- ImageListFullRequest
         AppResponse <|--ImageListFullResponse
-        AppRequest <|-- ImageListWithTagRequest
-        AppResponse <|--ImageListWithTagResponse
+        AppRequest <|-- ImageListWithTagsRequest
+        AppResponse <|--ImageListWithTagsResponse
 
 ```
