@@ -1,12 +1,15 @@
-﻿using Core.Options;
+﻿using Common.Core.DependencyInjection;
+using Core.Options;
 using Domain.Image;
 using Domain.Image.Repositories;
+using Infra.Http.Image.model;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
-using System.Net.Http;
-using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
 
 namespace Infra.Http.Image
 {
+    [ServiceLocate(typeof(IImageRepository))]
     public class ImageRepository : IImageRepository
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -20,6 +23,8 @@ namespace Infra.Http.Image
 
         public async Task<IList<RepositoryImage>> LoadFullList(CancellationToken token)
         {
+            var result = new List<RepositoryImage>();
+
             using var httpClient = CreateHttpClient();
 
             var relativeUrl = string.Concat("v2/", "_catalog");
@@ -30,7 +35,19 @@ namespace Infra.Http.Image
                 throw new HttpRequestException($"Failed to load full image list. Status code: {response.StatusCode}");
             }
 
-            return default;
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var imagesModel = JsonSerializer.Deserialize<ImagesModel>(content);
+
+            if (imagesModel != null)
+            {
+                foreach (var repository in imagesModel.Repositories)
+                {
+                    result.Add(new RepositoryImage(repository));
+                }
+            }
+            
+            return result;
         }
 
         #region Private Methods

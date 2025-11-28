@@ -1,5 +1,4 @@
 ﻿using Core.Test;
-using Domain.Image;
 using Domain.Image.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,16 +8,15 @@ namespace Domain.Test.Repositories;
 public class ImageRepositoryTest : BaseIntegrationTest
 {
     [TestMethod, TestCategory(nameof(EnumTestCategory.IntegrationTest))]
-    public async Task GIVEN_Image_WHEN_Load_THEN_Tags_Retern()
+    public async Task GIVEN_Image_WHEN_LoadFullList_THEN_Images_Retern()
     {
         // Arrange
-        var image = new RepositoryImage("authservice/authservice");
-        var service = _serviceProvider.GetRequiredService<ITagRepository>();
+        var service = _serviceProvider.GetRequiredService<IImageRepository>();
 
         // Action
-        var tags = await service.Load(image, CancellationToken.None).ConfigureAwait(false);
+        var images = await service.LoadFullList(CancellationToken.None).ConfigureAwait(false);
 
         // Assert
-        Assert.IsNotNull(tags);
+        Assert.IsNotNull(images);
     }
 }
