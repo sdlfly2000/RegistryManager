@@ -6,4 +6,4 @@ using var serviceProvider = ServiceRegister.Register("RegistryCtl");
 
 var worker = serviceProvider.GetRequiredService<Worker>();
 
-await worker.Execute();
+await worker.Execute(args);

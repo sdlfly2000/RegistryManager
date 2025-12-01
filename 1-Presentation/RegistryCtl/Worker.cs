@@ -1,8 +1,11 @@
-﻿namespace RegistryCtl
+﻿using Common.Core.DependencyInjection;
+
+namespace RegistryCtl
 {
-    internal class Worker
+    [ServiceLocate(default, ServiceType.Scoped)]
+    public class Worker
     {
-        public async Task Execute()
+        public async Task Execute(string[] args)
         {
             // Implementation goes here
         }
