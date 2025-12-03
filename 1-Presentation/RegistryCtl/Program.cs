@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using RegistryCtl;
 
-using var serviceProvider = ServiceRegister.Register("RegistryCtl");
+using var serviceProvider = ServiceRegister.Register("RegistryCtl", "Application", "Domain", "Infra.Http");
 
 var worker = serviceProvider.GetRequiredService<Worker>();
 

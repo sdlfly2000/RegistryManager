@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RegistryCtl": {
+      "commandName": "Project",
+      "commandLineArgs": "list --all"
+    }
+  }
+}

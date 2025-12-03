@@ -1,4 +1,5 @@
 ﻿using Application.Image;
+using Common.Core.DependencyInjection;
 using Domain.Image;
 using Domain.Image.Repositories;
 using Domain.Services.Image;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 
 namespace Application.Services.Image
 {
+    [ServiceLocate(typeof(IImageAppService), ServiceType.Scoped)]
     public class ImageAppService : IImageAppService
     {
         private readonly IImageService _imageService;
