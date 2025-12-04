@@ -7,11 +7,11 @@ namespace RegistryCtl.CommandLine
     [ServiceLocate(default)]
     public class CommandLineParser
     {
-        private readonly ListCommandDefinition _listCommandDefinition;
+        private readonly IEnumerable<ICommandDefinition> _commandDefinitions;
 
-        public CommandLineParser(ListCommandDefinition listCommandDefinition)
+        public CommandLineParser(IEnumerable<ICommandDefinition> commandDefinitions)
         {
-            _listCommandDefinition = listCommandDefinition;
+            _commandDefinitions = commandDefinitions;
         }
 
         public ParseResult Parse(string[] args)
@@ -19,7 +19,10 @@ namespace RegistryCtl.CommandLine
             // Define commands
             var rootCommand = new RootCommand("Manage Private Registry");
 
-            rootCommand.Subcommands.Add(_listCommandDefinition.Create());
+            foreach (var commandDefinition in _commandDefinitions)
+            {
+                rootCommand.Subcommands.Add(commandDefinition.Create());
+            }
 
             var parseResult = rootCommand.Parse(args);
 

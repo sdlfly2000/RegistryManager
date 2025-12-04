@@ -6,8 +6,8 @@ using System.Text;
 
 namespace RegistryCtl.CommandLine.Commands
 {
-    [ServiceLocate(default)]
-    public class ListCommandDefinition
+    [ServiceLocate(typeof(ICommandDefinition))]
+    public class ListCommandDefinition : ICommandDefinition
     {
         private readonly IImageAppService _imageAppService;
 
