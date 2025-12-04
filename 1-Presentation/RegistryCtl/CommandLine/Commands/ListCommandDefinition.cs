@@ -1,6 +1,9 @@
-﻿using Application.Services.Image;
+﻿using Application.Image;
+using Application.Services.Image;
 using Common.Core.DependencyInjection;
+using Core.CommandLine;
 using System.CommandLine;
+using System.CommandLine.Parsing;
 using System.Diagnostics;
 using System.Text;
 
@@ -54,18 +57,40 @@ namespace RegistryCtl.CommandLine.Commands
 
             if (isAll)
             {
-                var response = await _imageAppService.List(new Application.Image.ImageListFullRequest(), token).ConfigureAwait(false);
-                if (response.Success)
+                await ListAllImage(token).ConfigureAwait(false);
+            }
+            else 
+            {
+                if (!string.IsNullOrEmpty(imageName))
                 {
-                    var output = new StringBuilder();
-                    output.AppendLine();
-                    output.AppendLine("IMAGE LIST:");
-                    
-                    response.Images.ForEach(image =>
-                    {
-                        output.AppendLine($"{image.Name}");
-                    });
+                    await ListImageWithTags(imageName, token).ConfigureAwait(false);
                 }
+            }
+        }
+
+        private async Task ListImageWithTags(string imageName, CancellationToken token)
+        {
+            var response = await _imageAppService.List(new ImageListWithTagsRequest { Image = new Domain.Image.RepositoryImage(imageName) }, token);
+            if (response.Success)
+            {
+                CommandLineFormatter.Format(imageName, response.Image!.Tags.Select(tag => tag.Name).ToList());
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.ErrorMessage}");
+            }
+        }
+
+        private async Task ListAllImage(CancellationToken token)
+        {
+            var response = await _imageAppService.List(new Application.Image.ImageListFullRequest(), token).ConfigureAwait(false);
+            if (response.Success)
+            {
+                CommandLineFormatter.Format("Image List", response.Images.Select(image => image.Name).ToList());
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.ErrorMessage}");
             }
         }
     }
