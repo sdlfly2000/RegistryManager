@@ -1,5 +1,6 @@
 ﻿using Application.Image;
 using Common.Core.DependencyInjection;
+using Core.AOP.CatchException;
 using Domain.Image.Repositories;
 using Domain.Services.Image;
 
@@ -17,6 +18,7 @@ namespace Application.Services.Image
             _imageRepository = imageRepository;
         }
 
+        [CatchAppException(returnType: typeof(ImageListFullResponse))]
         public async Task<ImageListFullResponse> List(ImageListFullRequest request, CancellationToken token)
         {
             var response = new ImageListFullResponse
@@ -31,6 +33,7 @@ namespace Application.Services.Image
             return response;
         }
 
+        [CatchAppException(returnType: typeof(ImageListWithTagsResponse))]
         public async Task<ImageListWithTagsResponse> List(ImageListWithTagsRequest request, CancellationToken token)
         {
             var imageWithTags = await _imageService.LoadImageWithTags(request.Image, token).ConfigureAwait(false);
