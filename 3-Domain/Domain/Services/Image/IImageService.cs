@@ -4,5 +4,5 @@ namespace Domain.Services.Image;
 
 public interface IImageService
 {
-    Task<IImageWithTags> LoadImageWithTags(IRepositoryImage image, CancellationToken token);
+    Task<ImageWithTags> LoadImageWithTags(IRepositoryImage image, CancellationToken token);
 }

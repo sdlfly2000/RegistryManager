@@ -14,7 +14,7 @@ public class ImageService : IImageService
         _tagRepository = tagRepository;
     }
 
-    public async Task<IImageWithTags> LoadImageWithTags(IRepositoryImage image, CancellationToken token)
+    public async Task<ImageWithTags> LoadImageWithTags(IRepositoryImage image, CancellationToken token)
     {
         var tags = await _tagRepository.Load(image, token);
 

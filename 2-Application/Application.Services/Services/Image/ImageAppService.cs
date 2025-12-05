@@ -1,9 +1,7 @@
 ﻿using Application.Image;
 using Common.Core.DependencyInjection;
-using Domain.Image;
 using Domain.Image.Repositories;
 using Domain.Services.Image;
-using System.Collections.Generic;
 
 namespace Application.Services.Image
 {
@@ -35,7 +33,13 @@ namespace Application.Services.Image
 
         public async Task<ImageListWithTagsResponse> List(ImageListWithTagsRequest request, CancellationToken token)
         {
-            th
+            var imageWithTags = await _imageService.LoadImageWithTags(request.Image, token).ConfigureAwait(false);
+
+            return new ImageListWithTagsResponse
+            {
+                Success = true,
+                Image = imageWithTags
+            };
         }
     }
 }
