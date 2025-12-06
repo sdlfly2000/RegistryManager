@@ -1,6 +1,7 @@
 ﻿using Application.Image;
 using Common.Core.DependencyInjection;
 using Core.AOP.CatchException;
+using Domain.Image;
 using Domain.Image.Repositories;
 using Domain.Services.Image;
 
@@ -11,11 +12,26 @@ namespace Application.Services.Image
     {
         private readonly IImageService _imageService;
         private readonly IImageRepository _imageRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public ImageAppService(IImageService imageService, IImageRepository imageRepository)
+        public ImageAppService(IImageService imageService, IImageRepository imageRepository, ITagRepository tagRepository)
         {
             _imageService = imageService;
             _imageRepository = imageRepository;
+            _tagRepository = tagRepository;
+        }
+
+        [CatchAppException(returnType: typeof(ImageTagDeleteResponse))]
+        public async Task<ImageTagDeleteResponse> Delete(ImageTagDeleteRequest request, CancellationToken token)
+        {
+            var image = new RepositoryImage(request.ImageName);
+
+            await _tagRepository.Delete(image, request.TagName, token).ConfigureAwait(false);
+            
+            return new ImageTagDeleteResponse
+            {
+                Success = true
+            };
         }
 
         [CatchAppException(returnType: typeof(ImageListFullResponse))]
@@ -36,7 +52,8 @@ namespace Application.Services.Image
         [CatchAppException(returnType: typeof(ImageListWithTagsResponse))]
         public async Task<ImageListWithTagsResponse> List(ImageListWithTagsRequest request, CancellationToken token)
         {
-            var imageWithTags = await _imageService.LoadImageWithTags(request.Image, token).ConfigureAwait(false);
+            var image = new RepositoryImage(request.ImageName);
+            var imageWithTags = await _imageService.LoadImageWithTags(image, token).ConfigureAwait(false);
 
             return new ImageListWithTagsResponse
             {

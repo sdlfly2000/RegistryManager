@@ -1,26 +1,28 @@
 ﻿using Application.Image;
 using Application.Services.Image;
 using Common.Core.DependencyInjection;
-using Core.CommandLine;
 
 namespace RegistryCtl.CommandLine.Commands.Actions
 {
     [ServiceLocate(default)]
-    public class ListImageWithTagsAction
+    public class DeleteImageTagAction
     {
         private readonly IImageAppService _imageAppService;
 
-        public ListImageWithTagsAction(IImageAppService imageAppService)
+        public DeleteImageTagAction(IImageAppService imageAppService)
         {
             _imageAppService = imageAppService;
         }
 
-        public async Task Act(string imageName, CancellationToken token)
+        public async Task Act(string imageName,string tagName, CancellationToken token)
         {
-            var response = await _imageAppService.List(new ImageListWithTagsRequest { ImageName = imageName }, token);
+            var response = await _imageAppService
+                .Delete(new ImageTagDeleteRequest { ImageName = imageName, TagName = tagName }, token)
+                .ConfigureAwait(false);
+
             if (response.Success)
             {
-                CommandLineFormatter.Format(imageName, response.Image!.Tags.Select(tag => tag.Name).ToList());
+                Console.WriteLine($"Delete Tag [{tagName}] from image [{imageName}]");
             }
             else
             {

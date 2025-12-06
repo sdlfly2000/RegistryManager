@@ -1,9 +1,7 @@
-﻿using Domain.Image;
-
-namespace Application.Image
+﻿namespace Application.Image
 {
     public class ImageListWithTagsRequest : AppRequest
     {
-        public required RepositoryImage Image { get; set; }
+        public required string ImageName { get; set; }
     }
 }

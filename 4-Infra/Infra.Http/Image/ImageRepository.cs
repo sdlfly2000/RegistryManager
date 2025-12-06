@@ -3,7 +3,6 @@ using Core.Options;
 using Domain.Image;
 using Domain.Image.Repositories;
 using Infra.Http.Image.model;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 

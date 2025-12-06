@@ -3,10 +3,10 @@ using RegistryCtl.CommandLine.Commands.Actions;
 using System.CommandLine;
 using System.Diagnostics;
 
-namespace RegistryCtl.CommandLine.Commands
+namespace RegistryCtl.CommandLine.Commands.SubCommands
 {
     [ServiceLocate(default)]
-    public class ListCommandDefinition : ICommandDefinition
+    public class ListCommandDefinition
     {
         private readonly ListImageWithTagsAction _listImageWithTagsAction;
         private readonly ListAllImageAction _listAllImageAction;

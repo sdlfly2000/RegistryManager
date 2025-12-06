@@ -22,6 +22,15 @@
             start2 --"List"--> Image2 --> termination2
         end
 
+        subgraph List3["**Delete** (ImageTagDeleteRequest)"]
+            direction TB
+            start3((start))
+            termination3((end))
+
+            %%{relationship}%%
+            start3 --"Delete"--> termination3
+        end
+
 ```
 
 ---
@@ -48,7 +57,12 @@ config:
         }
 
         class ImageListWithTagsRequest {
-            + Image: RepositryImage
+            + ImageName: string
+        }
+
+        class ImageTagDeleteRequest{
+            + ImageName: string
+            + TagName: string
         }
 
         class ImageListFullResponse{
@@ -59,10 +73,16 @@ config:
             + Image: ImageWithTags
         }
 
+        class ImageTagDeleteResponse{
+        }
+
+
         %%{relationship}%%
         AppRequest <|-- ImageListFullRequest
         AppResponse <|--ImageListFullResponse
         AppRequest <|-- ImageListWithTagsRequest
         AppResponse <|--ImageListWithTagsResponse
+        AppRequest <|-- ImageTagDeleteRequest
+        AppResponse <|--ImageTagDeleteResponse
 
 ```

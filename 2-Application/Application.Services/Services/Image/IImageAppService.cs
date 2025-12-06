@@ -6,5 +6,6 @@ namespace Application.Services.Image
     {
         Task<ImageListFullResponse> List(ImageListFullRequest request, CancellationToken token);
         Task<ImageListWithTagsResponse> List(ImageListWithTagsRequest request, CancellationToken token);
+        Task<ImageTagDeleteResponse> Delete(ImageTagDeleteRequest request, CancellationToken token);
     }
 }
