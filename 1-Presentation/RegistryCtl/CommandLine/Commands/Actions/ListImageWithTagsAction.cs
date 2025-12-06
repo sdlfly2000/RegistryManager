@@ -20,7 +20,7 @@ namespace RegistryCtl.CommandLine.Commands.Actions
             var response = await _imageAppService.List(new ImageListWithTagsRequest { ImageName = imageName }, token);
             if (response.Success)
             {
-                CommandLineFormatter.Format(imageName, response.Image!.Tags.Select(tag => tag.Name).ToList());
+                CommandLineFormatter.Format($"Image: {imageName} Tags", response.Image!.Tags.Select(tag => tag.Name).ToList());
             }
             else
             {
