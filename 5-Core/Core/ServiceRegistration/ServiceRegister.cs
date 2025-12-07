@@ -8,7 +8,7 @@ namespace Core.ServiceRegistration;
 
 public class ServiceRegister
 {
-    public static ServiceProvider Register(params string[] assemblies)
+    public static IServiceCollection Register(params string[] assemblies)
     {
         var configuration = new ConfigurationManager()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -25,6 +25,6 @@ public class ServiceRegister
         serviceCollection.Configure<RegistryOption>(
             configuration.GetSection(RegistryOption.RegistrySection));
         serviceCollection.AddMemoryCache();
-        return serviceCollection.BuildServiceProvider();
+        return serviceCollection;
     }
 }

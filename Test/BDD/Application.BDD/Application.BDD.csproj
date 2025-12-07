@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="Reqnroll.Microsoft.Extensions.DependencyInjection" Version="3.2.1" />
+    <PackageReference Include="Reqnroll.MsTest" Version="3.2.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.10.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Drivers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\2-Application\Application.Services\Application.csproj" />
+    <ProjectReference Include="..\..\..\4-Infra\Infra.Http\Infra.Http.csproj" />
+    <ProjectReference Include="..\..\..\5-Core\Core.Shared\Core.Shared.csproj" />
+    <ProjectReference Include="..\..\..\5-Core\Core\Core.csproj" />
+  </ItemGroup>
+
+</Project>

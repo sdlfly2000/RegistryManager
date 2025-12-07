@@ -10,6 +10,6 @@ namespace Domain.Image
         }
 
         [CacheKey]
-        public string Name { get; }
+        public string Name { get; private set; }
     }
 }

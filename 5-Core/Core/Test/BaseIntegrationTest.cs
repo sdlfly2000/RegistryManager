@@ -1,4 +1,5 @@
 ﻿using Core.ServiceRegistration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Test;
 
@@ -8,6 +9,6 @@ public abstract class BaseIntegrationTest
 
     protected BaseIntegrationTest()
     {
-        _serviceProvider = ServiceRegister.Register("Domain", "Infra.Http");
+        _serviceProvider = ServiceRegister.Register("Domain", "Infra.Http").BuildServiceProvider();
     }
 }
